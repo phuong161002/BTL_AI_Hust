@@ -7,7 +7,7 @@ max_size = 5000
 min_size = 900
 
 # Load image
-img = cv2.imread('test.jpg', cv2.IMREAD_COLOR)
+img = cv2.imread('hello.jpg', cv2.IMREAD_COLOR)
 
 # Resize image
 img = cv2.resize(img, (620, 480))
