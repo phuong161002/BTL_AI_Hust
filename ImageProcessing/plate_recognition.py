@@ -22,7 +22,7 @@ def Recognize(img):
         plateImg = grayImg[y:y+h, x:x+w]
         plateImg = cv2.resize(plateImg, (400, 300))
         plate = {}
-        plate['original'] = img[y:y+h, x:x+w]
+        plate['original'] = cv2.resize(img[y:y+h, x:x+w], (400, 300))
         plate['grayimg'] = plateImg
         chars = []
         binaryImg = plateImg.copy()

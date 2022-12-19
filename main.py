@@ -1,5 +1,5 @@
-import ImageProcessing.plate_recognition as PR
-import TextRecognition.text_recognition as TR
+import ImageProcessing.plate_recognition as PlateRecognition
+import TextRecognition.text_recognition as TextRecognition
 import ImageProcessing.detect_lp as detector
 import cv2
 import os
@@ -37,20 +37,24 @@ def main():
     # # Loop through all image and recognize the plate license
     for img in imgs:
         # Get info of this image : plate, characters in plate
-        result = PR.Recognize(img['data'])
+        result = PlateRecognition.Recognize(img['data'])
         for plate in result:
             # Save character image to output directory
             for char in plate['chars']:
                 charImg = char['img']
-                strChar = TR.Char(charImg)
+                strChar = TextRecognition.Char(charImg)
                 fileName = strChar + '-----' + char['name'] + '.jpg'
                 charImgPath = os.path.join(config.outputDir, 'Chars', fileName)
                 cv2.imwrite(charImgPath, charImg)
       
             # Save plate image to output directory
             outputPath = os.path.join(config.outputPlateImgDir, img['name'])
+            outputGrayPlateImg = os.path.join(config.outputDir, 'GrayPlate', img['name'])
+            outputBinaryPlateImg = os.path.join(config.outputDir, 'BinaryPlate', img['name'])
             cv2.imwrite(outputPath, plate['original'])
-            showPlate(plate)
+            cv2.imwrite(outputGrayPlateImg, plate['grayimg'])
+            cv2.imwrite(outputBinaryPlateImg, plate['binaryimg'])
+            # showPlate(plate)
 
 def showPlate(plate):
     for char in plate['chars']:
