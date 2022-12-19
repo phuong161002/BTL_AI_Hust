@@ -7,6 +7,7 @@ import os
 
 projectDir = 'F:\\Python\\Car_Plate_Recognition\\BTL_AI_Hust'
 imgDir = 'F:\\Python\\Car_Plate_Recognition\\BTL_AI_Hust\\Image\\Source'
+outputDir = 'F:\\Python\\Car_Plate_Recognition\\BTL_AI_Hust\\Image\\Output'
 outputPlateImgDir = 'F:\\Python\\Car_Plate_Recognition\\BTL_AI_Hust\\Image\\Output\\Plate'
 
 def get_data(input_dir):
@@ -39,21 +40,22 @@ def main():
         result = PR.Recognize(img['data'])
         for plate in result:
             for char in plate['chars']:
-                cv2.imshow(str(char['rect']), char['img'])
-            cv2.imshow('grayimg', plate['grayimg'])
-            cv2.imshow('binaryimg', plate['binaryimg'])
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+                # cv2.imshow(str(char['rect']), char['img'])
+                charImg = char['img']
+                strChar = TR.Char(charImg)
+                fileName = strChar + '-----' + char['name'] + '.jpg'
+                charImgPath = os.path.join(outputDir, 'Chars', fileName)
+                cv2.imwrite(charImgPath, charImg)
+            # cv2.imshow('grayimg', plate['grayimg'])
+            # cv2.imshow('binaryimg', plate['binaryimg'])
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows
 
 
         # for (x, y, w, h) in result:
         #     cropped = img['data'][y:y+h, x:x+w]
-        #     outputPath = os.path.join(outputPlateImgDir, img['name'])
-            
-        #     cv2.imwrite(outputPath, cropped)
-
-        print(len(result))
-
+            outputPath = os.path.join(outputPlateImgDir, img['name'])
+            cv2.imwrite(outputPath, plate['original'])
         # cv2.imshow('test img ' + str(img), img)
 
     cv2.waitKey(0)
