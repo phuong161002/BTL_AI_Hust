@@ -1,21 +1,22 @@
 import ImageProcessing.plate_recognition as PR
 import TextRecognition.text_recognition as TR
-import ImageProcessing.preprocess as preprocess
-import ImageProcessing.detect_lp as detector
 import cv2
 import os
-
-projectDir = 'F:\\Python\\Car_Plate_Recognition\\BTL_AI_Hust'
-imgDir = 'F:\\Python\\Car_Plate_Recognition\\BTL_AI_Hust\\Image\\Source'
-outputDir = 'F:\\Python\\Car_Plate_Recognition\\BTL_AI_Hust\\Image\\Output'
-outputPlateImgDir = 'F:\\Python\\Car_Plate_Recognition\\BTL_AI_Hust\\Image\\Output\\Plate'
+import config
 
 def get_data(input_dir):
+    # Return list image data of all images in input directory
+    # image data :
+    # {
+    #   name : file name of image
+    #   data : image
+    #
+    # }
     imgs = []
      # Read all image in folder
     for file in os.listdir(input_dir):
         if file.endswith('.jpg'):
-            imgPath = os.path.join(imgDir, file)
+            imgPath = os.path.join(config.imgDir, file)
             img = cv2.imread(imgPath)
             imgObj = {}
             imgObj['name'] = file
@@ -25,43 +26,27 @@ def get_data(input_dir):
     #end for
     return imgs
 
-def main_():
-    imgs = get_data(imgDir)
-    plate = detector.Detect(imgs[0]['data'])
-    print(plate)
-
-
 def main():
-    imgs = get_data(imgDir)
+    # Load data from input Directory
+    imgs = get_data(config.imgDir)
 
     # Loop through all image and recognize the plate license
     for img in imgs:
-        # result = detector.DetectWithHaarCascade(imgOriginal=img['data'])
+        # Get info of this image : plate, characters in plate
         result = PR.Recognize(img['data'])
         for plate in result:
+            # Save character image to output directory
             for char in plate['chars']:
-                # cv2.imshow(str(char['rect']), char['img'])
                 charImg = char['img']
                 strChar = TR.Char(charImg)
                 fileName = strChar + '-----' + char['name'] + '.jpg'
-                charImgPath = os.path.join(outputDir, 'Chars', fileName)
+                charImgPath = os.path.join(config.outputDir, 'Chars', fileName)
                 cv2.imwrite(charImgPath, charImg)
-            # cv2.imshow('grayimg', plate['grayimg'])
-            # cv2.imshow('binaryimg', plate['binaryimg'])
-            # cv2.waitKey(0)
-            # cv2.destroyAllWindows
-
-
-        # for (x, y, w, h) in result:
-        #     cropped = img['data'][y:y+h, x:x+w]
-            outputPath = os.path.join(outputPlateImgDir, img['name'])
+      
+            # Save plate image to output directory
+            outputPath = os.path.join(config.outputPlateImgDir, img['name'])
             cv2.imwrite(outputPath, plate['original'])
-        # cv2.imshow('test img ' + str(img), img)
 
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-    # result = PR.Recognize(img)            
 
 
 if __name__ == '__main__':

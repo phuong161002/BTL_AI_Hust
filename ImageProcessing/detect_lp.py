@@ -1,8 +1,9 @@
 import cv2
 from ImageProcessing import preprocess
+import config
 
-cascadePath = '.\\Model\\HaarCascade\\plate_cascade.xml'
-plateCascade = cv2.CascadeClassifier(cascadePath)
+
+plateCascade = cv2.CascadeClassifier(config.cascadePath)
 
 def DetectWithHaarCascade(imgOriginal): 
     gray = cv2.cvtColor(imgOriginal, cv2.COLOR_BGR2GRAY)
