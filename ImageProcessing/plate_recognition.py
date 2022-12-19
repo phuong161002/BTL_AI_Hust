@@ -29,7 +29,7 @@ def Recognize(img):
         
         # cv2.threshold(plateImg, 50, 255, cv2.THRESH_BINARY_INV, binaryImg)
         cv2.adaptiveThreshold(plateImg, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 21, 2.0, binaryImg)
-        kernel3 = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 1))
+        kernel3 = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
        
         cv2.dilate(binaryImg, kernel3, iterations=3)
         cv2.erode(binaryImg, kernel3, iterations=3)

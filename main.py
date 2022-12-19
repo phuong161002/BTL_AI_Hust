@@ -1,5 +1,6 @@
 import ImageProcessing.plate_recognition as PR
 import TextRecognition.text_recognition as TR
+import ImageProcessing.detect_lp as detector
 import cv2
 import os
 import config
@@ -30,7 +31,10 @@ def main():
     # Load data from input Directory
     imgs = get_data(config.imgDir)
 
-    # Loop through all image and recognize the plate license
+    # img = imgs[0]['data']
+    # plate = detector.DetectWithHaarCascade(img)
+
+    # # Loop through all image and recognize the plate license
     for img in imgs:
         # Get info of this image : plate, characters in plate
         result = PR.Recognize(img['data'])
@@ -46,8 +50,16 @@ def main():
             # Save plate image to output directory
             outputPath = os.path.join(config.outputPlateImgDir, img['name'])
             cv2.imwrite(outputPath, plate['original'])
+            showPlate(plate)
 
-
+def showPlate(plate):
+    for char in plate['chars']:
+        cv2.imshow(char['name'], char['img'])
+    cv2.imshow('original', plate['original'])
+    cv2.imshow('grayimg', plate['grayimg'])
+    cv2.imshow('binaryimg', plate['binaryimg'])
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     main()
