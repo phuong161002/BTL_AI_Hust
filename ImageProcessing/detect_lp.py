@@ -1,11 +1,5 @@
 import cv2
-import imutils
-import numpy as np
 from ImageProcessing import preprocess
-
-# Param
-max_size = 5000
-min_size = 900
 
 cascadePath = '.\\Model\\HaarCascade\\plate_cascade.xml'
 plateCascade = cv2.CascadeClassifier(cascadePath)
